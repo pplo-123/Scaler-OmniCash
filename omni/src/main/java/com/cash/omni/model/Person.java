@@ -1,4 +1,4 @@
 package com.cash.omni.model;
 
-public class Person {
+public class Person extends Auditable {
 }
