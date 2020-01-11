@@ -1,12 +1,11 @@
 package com.cash.omni.model;
 
 import com.cash.omni.Constants;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -14,17 +13,17 @@ import java.util.Date;
 public class Feedback extends Auditable{
 
     @Getter @Setter @Column(length = Constants.MAX_FEEDBACK_LENGTH)
-    private String content;
+    private String review;
 
     @Getter @Setter
-    private int stars;
+    private int rating;
 
-    @Getter @Setter
+    @Getter @Setter @ManyToOne
     private Outlet outlet;
 
-    @Getter @Setter
-    private Person feedBacker;
+    @Getter @Setter @ManyToOne
+    private Customer customer;
 
     @Getter @Setter
-    private Date feedbackDate;
+    private Date feedbackDate = new Date();
 }

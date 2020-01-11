@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -25,14 +26,14 @@ public class Transaction extends Auditable {
     @Getter @Setter
     private boolean  isSuccessful;
 
-    @Getter @Setter
-    private Outlet creditedTo;
+    @Getter @Setter @ManyToOne
+    private Outlet outlet;
+
+    @Getter @Setter @ManyToOne
+    private Customer customer;
 
     @Getter @Setter
-    private Person debitedFrom;
-
-    @Getter @Setter
-    private Date transactionDate;
+    private Date transactionDate = new Date();
 
 
 
