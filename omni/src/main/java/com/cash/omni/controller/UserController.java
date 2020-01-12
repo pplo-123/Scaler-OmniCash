@@ -1,25 +1,23 @@
 package com.cash.omni.controller;
 
 
-import com.cash.omni.controller.Services.UserServices;
-import com.cash.omni.model.*;
-import com.cash.omni.repository.UserRepository;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import javax.validation.Valid;
+import com.cash.omni.model.*;
+import com.cash.omni.repository.*;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import net.bytebuddy.implementation.auxiliary.AuxiliaryType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+
+
+import java.net.URI;
+
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -27,11 +25,25 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UserServices userServices;
+    private OutletOwnerRepository outletOwnerRepository;
+
+
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private OutletRepository outletRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
+    private FeedbackRepository feedbackRepository;
 
     @PutMapping("/sign-up")
     public Customer saveUser(@RequestBody Customer customer){
-        return userServices.saveUser(customer);
+        return userRepository.save(customer);
     }
 
 
@@ -60,25 +72,39 @@ public class UserController {
     }
 
      */
+    @GetMapping("get-all-outlets")
+    public List<Outlet> getAllOutlets(){
+        return outletRepository.findAll();
+    }
+
+    @GetMapping("select-outlet/{id}")
+    public Outlet selectOutlet(@PathVariable long id){
+        return outletRepository.findById(id).orElseThrow();
+    }
 
 
     @PostMapping("save-feedback")
-
     public Feedback saveFeedback( @RequestBody Feedback feedback){
 
-        return userServices.saveFeedback(feedback);
+        return feedbackRepository.save(feedback);
 
 
     }
 
-    @GetMapping("get-outlets")
-    public String getNearestOutlets() throws IOException {
+    /*@GetMapping("get-outlets")
+    public void getNearestOutlets() throws IOException, UnirestException, InterruptedException {
 
-        URL response = new URL("https://api.ipdata.co/?api-key=28616745af5276150c5aa4ffe496d9f4f9126bbbe0cfe276bf40951a");
 
-        URLConnection conn = response.openConnection();
 
-        InputStream stream = conn.getInputStream();
+        String api = "https://api.ipdata.co/?api-key=28616745af5276150c5aa4ffe496d9f4f9126bbbe0cfe276bf40951a";
+
+        HttpResponse<JsonNode> response = (HttpResponse<JsonNode>) Unirest.get(api).asJson();
+
+        System.out.println(response);
+
+
+
+
 
 
 
@@ -88,22 +114,50 @@ public class UserController {
 
     }
 
+     */
 
 
 
-    @GetMapping("get_transaction-history/{id}")
+
+
+
+    /*@GetMapping("get-transaction-history/{id}")
 
     public List<Transaction> getTransactionHistory(@PathVariable long id) throws Throwable {
 
-        return userServices.getTransactionHistory(id);
+        Customer customer = userRepository.findById(id).orElseThrow();
 
+
+
+
+    }
+
+     */
+
+
+    @GetMapping("get-customer/{id}")
+    public Customer getCustomer(@PathVariable long id){
+        return userRepository.findById(id).orElseThrow();
     }
 
     @PutMapping("edit-user-profile")
-    public Customer updateUserProfile(Customer customer){
-        return userServices.editProfile(customer);
+    public Customer updateUserProfile(@RequestBody Customer customer){
+        Customer oldCustomer = userRepository.findById(customer.getId()).orElseThrow();
+
+        oldCustomer.setName(customer.getName());
+        oldCustomer.setEmail(customer.getEmail());
+        oldCustomer.setPassword(customer.getPassword());
+        oldCustomer.setPhoneNumber(customer.getPhoneNumber());
+
+        return userRepository.save(oldCustomer);
+
     }
 
+    @PutMapping("create-transaction") // id = outlet_id
+    public Transaction createTransaction(@RequestBody Transaction transaction)
+    {
+        return transactionRepository.save(transaction);
+    }
 
 
 

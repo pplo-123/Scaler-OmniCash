@@ -3,6 +3,7 @@ package com.cash.omni.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,9 +28,11 @@ public class Transaction extends Auditable {
     private boolean  isSuccessful;
 
     @Getter @Setter @ManyToOne
+    @JsonIdentityReference
     private Outlet outlet;
 
     @Getter @Setter @ManyToOne
+    @JsonIdentityReference
     private Customer customer;
 
     @Getter @Setter

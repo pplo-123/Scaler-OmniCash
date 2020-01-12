@@ -11,5 +11,5 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    List<Transaction>  findByCustomer(Optional<Customer> customer);
+
 }

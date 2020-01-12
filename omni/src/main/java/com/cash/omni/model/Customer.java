@@ -1,5 +1,6 @@
 package com.cash.omni.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,11 +27,13 @@ public class Customer extends Person {
     @Getter
     @Setter
     @OneToMany(mappedBy = "customer")
+    @JsonIdentityReference
     private List<Transaction> transactionList;
 
 
     @Getter
     @Setter
     @OneToMany(mappedBy = "customer")
+    @JsonIdentityReference
     private List<Feedback> feedbackList;
 }

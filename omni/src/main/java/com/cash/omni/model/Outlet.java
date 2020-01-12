@@ -1,6 +1,7 @@
 package com.cash.omni.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,17 +32,20 @@ public class Outlet extends Auditable {
     private int availableCash;
 
     @Getter @Setter
-    private boolean isAvailable;
+    private boolean isAvailable = false;
 
     @Getter @Setter
     @ManyToOne
+    @JsonIdentityReference
     private OutletOwner outletOwner;
 
 
     @Getter @Setter @OneToMany(mappedBy = "outlet")
+    @JsonIdentityReference
     private List<Transaction> transactionList;
 
     @Getter @Setter @OneToMany(mappedBy = "outlet")
+    @JsonIdentityReference
     private List<Feedback> feedbackList;
 
 }

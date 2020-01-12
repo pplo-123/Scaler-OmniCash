@@ -1,30 +1,40 @@
-package com.cash.omni.controller.Services;
+package com.cash.omni.controller;
 
-import com.cash.omni.model.Feedback;
-import com.cash.omni.model.Outlet;
-import com.cash.omni.model.OutletOwner;
-import com.cash.omni.model.Transaction;
+import com.cash.omni.model.*;
 import com.cash.omni.repository.OutletOwnerRepository;
 import com.cash.omni.repository.OutletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-public class OutletOwnerService
+@RestController
+@RequestMapping("/outlet_owner")
+public class OutletOwnerController
 {
-    @Autowired
+
     List<Outlet> outletList;
+
     List<Transaction> transactionList;
+
+
     Outlet outlet;
+
+
     OutletOwner outletOwner;
+
+    @Autowired
     OutletOwnerRepository outletOwnerRepository;
+
+    @Autowired
     OutletRepository outletRepository;
 
+
+    @PutMapping("/sign-up")
+    public OutletOwner saveOutletOwner(@RequestBody  OutletOwner outletOwner){
+        return outletOwnerRepository.save(outletOwner);
+    }
     @PostMapping("/add_outlet")
     public Outlet addOutlet(@Valid @RequestBody Outlet outlet)
     {
@@ -60,7 +70,14 @@ public class OutletOwnerService
     @PostMapping("/editProfile")
     public OutletOwner editProfileInfo(@RequestBody OutletOwner outletOwner)
     {
-        return outletOwnerRepository.save(outletOwner);
+        OutletOwner oldOutletOwner = outletOwnerRepository.findById(outletOwner.getId()).orElseThrow();
+
+        oldOutletOwner.setName(outletOwner.getName());
+        oldOutletOwner.setEmail(outletOwner.getEmail());
+        oldOutletOwner.setPassword(outletOwner.getPassword());
+        oldOutletOwner.setPhoneNumber(outletOwner.getPhoneNumber());
+
+        return outletOwnerRepository.save(oldOutletOwner);
     }
 
     @GetMapping("/getTransactions/{owner_id}")
@@ -81,6 +98,6 @@ public class OutletOwnerService
     @GetMapping("/check_reviews/{outlet_id}")
     public List<Feedback> getReviews(@PathVariable(value = "outlet_id") Long outletId)
     {
-        outletRepository.findFeedbacks(outletId);
+        return outletRepository.findFeedbacks(outletId);
     }
 }

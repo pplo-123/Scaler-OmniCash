@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OutletRepository extends JpaRepository<Outlet,Long> {
-
-    @Query("select f.content, f.review, f.customer, f.Date from outlets o inner join feedbacks f on o.id = f.outlet where o.id = ?1")
+public interface OutletRepository extends JpaRepository<Outlet, Long>
+{
+    @Query(value = "select f from Outlet o inner join Feedback f where o.id = f.outlet and o.id = ?1", nativeQuery = true)
     public List<Feedback> findFeedbacks(Long id);
 }

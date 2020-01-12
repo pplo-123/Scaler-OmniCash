@@ -12,6 +12,6 @@ import java.util.List;
 public interface OutletOwnerRepository extends JpaRepository<OutletOwner,Long> {
 
 
-    @Query("select t.amount, t.transactionId, t.isSuccessful, t.creditedTo, t.debitedFrom, t.transactionDate from outlets o inner join transactions t on o.id = t.transaction_owner where o.owner = ?1")
-    List<Transaction> findTransactionsByOutletOwner(Long id);
+    @Query(value = "select t from Outlet o inner join Transaction t on o.id = t.outlet where o.outletOwner = ?1", nativeQuery = true)
+    List<Transaction> findTransactionByOutletOwner(Long id);
 }

@@ -1,5 +1,6 @@
 package com.cash.omni.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,11 +18,12 @@ public class OutletOwner extends Person {
     @Getter
     @Setter
     @NotNull
-    private boolean isVerified;
+    private boolean isVerified = false;
 
     @Getter
     @Setter
     @OneToMany(mappedBy = "outletOwner")
+    @JsonIdentityReference
     private List<Outlet> outletList;
 
 
