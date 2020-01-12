@@ -13,10 +13,11 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.http.HttpResponse;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -77,11 +78,17 @@ public class UserController {
 
         URLConnection conn = response.openConnection();
 
+        InputStream stream = conn.getInputStream();
+
+
+
 
 
 
 
     }
+
+
 
 
     @GetMapping("get_transaction-history/{id}")
