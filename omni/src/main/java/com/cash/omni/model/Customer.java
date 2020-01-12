@@ -23,6 +23,8 @@ public class Customer extends Person {
     //@Getter
     //@Setter
     //GoogleMap curr_locn;
+    @Getter @Setter
+    private int cashAvailable;
 
     @Getter
     @Setter

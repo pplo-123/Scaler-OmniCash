@@ -41,10 +41,10 @@ public class OutletOwnerController
         return outletRepository.save(outlet);
     }
 
-    @GetMapping("/selectOutlets/{owner_id}")
-    public List<Outlet> selectOutlets(@PathVariable(value = "owner_id") Long ownerId)
+    @GetMapping("/select-outlets/{id}")
+    public List<Outlet> selectOutlets(@PathVariable(value = "id") long id)
     {
-        return outletOwnerRepository.findById(ownerId).orElseThrow().getOutletList();
+        return outletOwnerRepository.findById(id).orElseThrow().getOutletList();
     }
 
     @GetMapping("/selectOutlets/checkBalance/{outlet_id}")

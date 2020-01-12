@@ -32,6 +32,8 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    private Customer customer;
+
     @Autowired
     private OutletRepository outletRepository;
 
@@ -46,7 +48,8 @@ public class UserController {
         return userRepository.save(customer);
     }
 
-
+    int amt;
+    Outlet outlet;
 
 
     /* @PostMapping("/log-in")
@@ -102,37 +105,19 @@ public class UserController {
 
         System.out.println(response);
 
-
-
-
-
-
-
-
-
-
-
     }
 
      */
 
 
-
-
-
-
-    /*@GetMapping("get-transaction-history/{id}")
+    @GetMapping("get-transaction-history/{id}")
 
     public List<Transaction> getTransactionHistory(@PathVariable long id) throws Throwable {
 
-        Customer customer = userRepository.findById(id).orElseThrow();
+        //Customer customer = userRepository.findById(id).orElseThrow();
 
-
-
-
+        return transactionRepository.findAllByCustomerId(id);
     }
-
-     */
 
 
     @GetMapping("get-customer/{id}")
@@ -156,6 +141,14 @@ public class UserController {
     @PutMapping("create-transaction") // id = outlet_id
     public Transaction createTransaction(@RequestBody Transaction transaction)
     {
+        amt = transaction.getAmount();
+        outlet = transaction.getOutlet();
+        outlet.setAvailableCash(outlet.getAvailableCash() - amt);
+        outletRepository.save(outlet);
+        customer = transaction.getCustomer();
+        customer.setCashAvailable(customer.getCashAvailable() - amt);
+        userRepository.save(customer);
+
         return transactionRepository.save(transaction);
     }
 
