@@ -1,7 +1,8 @@
 package com.cash.omni.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,9 +22,8 @@ public class Outlet extends Auditable {
     private String name;
 
     @Getter @Setter @NotBlank
-    private String location;
+    private Location location;
 
-    // private Location mapLocation;
 
     @Getter @Setter @NotBlank
     private String outletType;
@@ -36,16 +36,17 @@ public class Outlet extends Auditable {
 
     @Getter @Setter
     @ManyToOne
-    @JsonIdentityReference
+    @JsonBackReference
     private OutletOwner outletOwner;
 
 
     @Getter @Setter @OneToMany(mappedBy = "outlet")
-    @JsonIdentityReference
+    @JsonManagedReference
     private List<Transaction> transactionList;
 
     @Getter @Setter @OneToMany(mappedBy = "outlet")
-    @JsonIdentityReference
+    @JsonManagedReference
     private List<Feedback> feedbackList;
+
 
 }

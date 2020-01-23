@@ -12,6 +12,6 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    @Query(value = "select t from customers c inner join transactions t on c.customer = t.customer where c.id = ?1", nativeQuery = true)
+    @Query(value = "select t.* from customers c inner join transactions t on c.id = t.customer_id where c.id = ?1", nativeQuery = true)
     List<Transaction> findAllByCustomerId(long id);
 }

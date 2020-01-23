@@ -1,6 +1,8 @@
 package com.cash.omni.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,13 +31,13 @@ public class Customer extends Person {
     @Getter
     @Setter
     @OneToMany(mappedBy = "customer")
-    @JsonIdentityReference
+    @JsonManagedReference
     private List<Transaction> transactionList;
 
 
     @Getter
     @Setter
     @OneToMany(mappedBy = "customer")
-    @JsonIdentityReference
+    @JsonManagedReference
     private List<Feedback> feedbackList;
 }

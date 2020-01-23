@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/outlet_owner")
+@RequestMapping("/outlet-owner")
 public class OutletOwnerController
 {
 
@@ -80,8 +80,8 @@ public class OutletOwnerController
         return outletOwnerRepository.save(oldOutletOwner);
     }
 
-    @GetMapping("/getTransactions/{owner_id}")
-    public List<Transaction> getTransactions(@PathVariable(value = "owner_id") Long ownerId)
+    @GetMapping("/get-transactions/{owner-id}")
+    public List<Transaction> getTransactions(@PathVariable(value = "owner-id") Long ownerId)
     {
         return outletOwnerRepository.findTransactionByOutletOwner(ownerId);
     }

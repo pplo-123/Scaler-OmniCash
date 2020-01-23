@@ -2,23 +2,32 @@ package com.cash.omni.controller;
 
 
 
+import com.cash.omni.Utils;
 import com.cash.omni.model.*;
 import com.cash.omni.repository.*;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import net.bytebuddy.implementation.auxiliary.AuxiliaryType;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
 
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 
 
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 @RestController
 @RequestMapping("/user")
@@ -94,20 +103,44 @@ public class UserController {
 
     }
 
-    /*@GetMapping("get-outlets")
-    public void getNearestOutlets() throws IOException, UnirestException, InterruptedException {
+    @GetMapping("get-outlets")
+    public void getNearestOutlets() throws IOException, ParseException {
+
+        URL url  = new URL(Utils.locationApiUrl);
+        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.connect();
+        int responseCode = conn.getResponseCode();
+
+        if (responseCode!=200){
+            System.out.println("Api Error!");
+        }
+        else{
+            Scanner sc = new Scanner(url.openStream());
+            String apiData = "";
+            while(sc.hasNext()){
+                apiData+=sc.nextLine();
+            }
+
+            JSONParser parse = new JSONParser();
+            JSONObject object = (JSONObject)parse.parse(apiData);
+
+            double user_lat = (double) object.get("latitude");
+            double user_long = (double) object.get("longitude");
+
+            System.out.println(user_lat);
+            System.out.println((user_long));
+
+
+        }
 
 
 
-        String api = "https://api.ipdata.co/?api-key=28616745af5276150c5aa4ffe496d9f4f9126bbbe0cfe276bf40951a";
 
-        HttpResponse<JsonNode> response = (HttpResponse<JsonNode>) Unirest.get(api).asJson();
-
-        System.out.println(response);
 
     }
 
-     */
+
 
 
     @GetMapping("get-transaction-history/{id}")
